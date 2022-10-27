@@ -8,8 +8,10 @@ public class PlayerMovement : MonoBehaviour
    
     public float speed = 10.0f;
     public GameObject attack;
-    public int maxHealth = 100;
+    private int maxHealth = 100;
     public int currentHealth;
+
+    public HealthSystem healthBar;
     // Start is called before the first frame update
     void Start()
     {
@@ -19,18 +21,51 @@ public class PlayerMovement : MonoBehaviour
 
     public void Health()
     { 
-        currentHealth = maxHealth; 
+        currentHealth = maxHealth;
+        healthBar.HealthMax(maxHealth);
     }
 
     // Update is called once per frame
     void Update()
     {
 
-
         // rbPlayer.AddForce(direction * speed, ForceMode.Acceleration);  [this was used on a previous movement method that didn't work]
         AttackPower();
         LimitMovement();
-        
+
+        if (Input.GetKeyDown(KeyCode.Backspace))
+        {
+            TakeDamage(20);
+        }
+    }
+
+    public void AttackPower()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Instantiate(attack, transform.position, attack.transform.rotation);
+        }
+
+
+    }
+
+    public void TakeDamage(int damage)
+    {
+        currentHealth -= damage;
+        healthBar.CurrentHealth(currentHealth);
+        if (currentHealth < 0)
+        {
+            currentHealth = 0;
+        }
+    }
+
+    public void Heal(int heal)
+    {
+        currentHealth += heal;
+        if (currentHealth > maxHealth)
+        {
+            currentHealth = 100;
+        }
     }
     // Update is called once per frame
     void FixedUpdate()
@@ -42,15 +77,7 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
-    public void AttackPower()
-    {
-        if (Input.GetKeyDown(KeyCode.Comma))
-        {
-            Instantiate(attack, transform.position, attack.transform.rotation);
-        }
-     
-
-    }
+    
 
     private void LimitMovement()
     {
