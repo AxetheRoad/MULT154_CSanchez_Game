@@ -16,7 +16,7 @@ public class Monster : MonoBehaviour
     public List<GameObject> waypoints;
     private NavMeshAgent agent;
     private GameObject currentWP;
-    private const float WP_THRESHOLD = 3.0f;
+    private const float WP_THRESHOLD = 5.0f;
     private int currentWPIndex = -1;
     public GameObject attack;
 
@@ -45,19 +45,22 @@ public class Monster : MonoBehaviour
     Vector3 wanderTarget = Vector3.zero;
     public void Wander()
     {
-        float wanderRadius = 3;
-        float wanderDistance = 3;
+        float wanderRadius = 10;
+        //float wanderDistance = 10;
         float wanderJitter = 1;
 
         wanderTarget += new Vector3(Random.Range(-1.0f, 1.0f) * wanderJitter,
                                         0,
                                         Random.Range(-1.0f, 1.0f) * wanderJitter);
+        Debug.Log("Target before Normalize" + wanderTarget);
         wanderTarget.Normalize();
         wanderTarget *= wanderRadius;
 
-        Vector3 targetLocal = wanderTarget + new Vector3(0, 0, wanderDistance);
+        Vector3 targetLocal = wanderTarget; // + new Vector3(0, 0, wanderDistance);
 
         Seek(transform.position + targetLocal);
+        Debug.Log("target Local:" + targetLocal);
+        Debug.Log("Target Normalized" + wanderTarget);
     }
     void Update()
     {
