@@ -14,11 +14,14 @@ public class Damage : MonoBehaviour
     }
 
     public EnemyDamage enemyType;
-    private PlayerMovement damage;
+    private PlayerMovement hit;
+ 
+    public int damage = 0;
     // Start is called before the first frame update
     void Start()
     {
-        damage = GetComponent<PlayerMovement>();
+        hit = GetComponent<PlayerMovement>();
+      
     }
 
     // Update is called once per frame
@@ -27,21 +30,26 @@ public class Damage : MonoBehaviour
         switch(enemyType)
         {
             case EnemyDamage.EASY:
-                //damage.TakeDamage(5);
+                hit.TakeDamage(damage = 10);
                 break;
             case EnemyDamage.MEDIUM:
-                damage.TakeDamage(10);
+                hit.TakeDamage(damage = 20);
                 break;
             case EnemyDamage.HARD:
-                damage.TakeDamage(20);
+                hit.TakeDamage(damage = 30);
                 break;
             case EnemyDamage.EXPERT:
-                damage.TakeDamage(30);
+                hit.TakeDamage(damage = 50);
                 break;
             case EnemyDamage.EXTREME:
-                damage.TakeDamage(50);
+                hit.TakeDamage(damage = 100);
                 break;
 
         }
+    }
+    public void OnTriggerEnter(Collider other)
+    {
+        other.gameObject.GetComponent<PlayerMovement>().TakeDamage(damage);
+        return;
     }
 }

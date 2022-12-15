@@ -5,12 +5,19 @@ using UnityEngine.AI;
 
 public class Monster : MonoBehaviour
 {
+   // public int maxHealth = 100;
+  //  public int currentHealth;
+
+    private Animator animEnemy;
+    private bool enemyStop = false;
+ 
     public enum behaviour
     {
         PATROL,
         WANDER
     }
-    public behaviour enemyB;
+
+    public behaviour enemy;
   
 
     public List<GameObject> waypoints;
@@ -18,14 +25,26 @@ public class Monster : MonoBehaviour
     private GameObject currentWP;
     private const float WP_THRESHOLD = 5.0f;
     private int currentWPIndex = -1;
-    public GameObject attack;
+  
 
-    
+
+
     // Start is called before the first frame update
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         currentWP = GetNextWaypoint();
+    }
+
+    public void destroy()
+    {
+       
+             enemyStop = true;
+             //auSlime.PlayOneShot(dieSound, 1.0f);
+             // animEnemy.SetBool("Die", true);
+             Destroy(gameObject, 2f);
+       
+ 
     }
 
     GameObject GetNextWaypoint()
@@ -64,7 +83,7 @@ public class Monster : MonoBehaviour
     }
     void Update()
     {
-        switch(enemyB)
+        switch(enemy)
         {
             case behaviour.PATROL:
                 if (Vector3.Distance(transform.position, currentWP.transform.position) < WP_THRESHOLD)
@@ -78,6 +97,21 @@ public class Monster : MonoBehaviour
                 Wander();
                 break;
         }
+
         
     }
+    
+    private void OnTriggerEnter(Collider other)
+
+    {
+        if (other.gameObject.name == "Player")
+
+        {
+           // animEnemy.SetTrigger("Attack");
+            //auSlime.PlayOneShot(attackSound, .5f);
+        }
+    }
+
+
+  
 }
