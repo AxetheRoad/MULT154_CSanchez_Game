@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -12,10 +13,12 @@ public class PlayerMovement : MonoBehaviour
     public int currentHealth;
     private Animator anim;
     public HealthSystem healthBar;
+    private GameManager end;
     // Start is called before the first frame update
 
     void Start()
     {
+        end = GetComponent<GameManager>();
         rbPlayer = GetComponent<Rigidbody>();
         Health();
         anim = GetComponent<Animator>();
@@ -80,12 +83,17 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void Death()
+    public void EndGame()
     {
         if (currentHealth <= 0)
         {
             anim.SetTrigger("Dead");
+            
+            SceneManager.LoadScene("EndScene");
+
         }
+
+        
         
     }
     
@@ -99,7 +107,7 @@ void FixedUpdate()
 
         anim.SetFloat("SpeedV",verticalInput);
         anim.SetFloat("SpeedH", horizontalInput);
-     //   GameOver();
+        EndGame();
     }
 
     
